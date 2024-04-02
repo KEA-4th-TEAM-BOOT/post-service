@@ -1,0 +1,30 @@
+version: '3.7'
+services:
+  mysql:
+    container_name: post-mysql
+    image: ubuntu/mysql:edge
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --explicit_defaults_for_timestamp=1
+    ports:
+      - 3307:3306
+    environment:
+      - MYSQL_DATABASE=post
+      - MYSQL_USER=admin
+      - MYSQL_PASSWORD=1234
+      - MYSQL_ROOT_PASSWORD=1234
+      - TZ=UTC
+    volumes:
+      - ./mysql/init:/docker-entrypoint-initdb.d
+
+  mongodb:
+    container_name: post-mongodb
+    image: mongo:latest
+    command: mongod
+    ports:
+      - 27017:27017
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=1234
+      - MONGO_INITDB_DATABASE=post
+    volumes:
+      - ./mongodb/data:/data/db
+      - ./mongodb/init:/docker-entrypoint-initdb.d
