@@ -1,4 +1,4 @@
-package com.example.postservice.entity;
+package com.example.postservice.model;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,8 +8,8 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Entity
-@Table(name = "reply")
-public class Reply extends BaseTimeEntity{
+@Table(name = "comment")
+public class Comment extends BaseTimeEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,12 +17,12 @@ public class Reply extends BaseTimeEntity{
     @Column(nullable = false)
     private String content;
 
+    private Boolean replyInclude;
+
     @Column(nullable = false)
     private Long userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "comment_id")
-    private Comment comment;
-
-
+    @JoinColumn(name = "post_id")
+    private Post post;
 }

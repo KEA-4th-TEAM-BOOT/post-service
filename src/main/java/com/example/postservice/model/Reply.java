@@ -1,6 +1,5 @@
-package com.example.postservice.entity;
+package com.example.postservice.model;
 
-import io.micrometer.core.annotation.Counted;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,16 +8,21 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Entity
-@Table(name = "like")
-public class Like extends BaseTimeEntity{
+@Table(name = "reply")
+public class Reply extends BaseTimeEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
+    private String content;
+
+    @Column(nullable = false)
     private Long userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "post_id")
-    private Post post;
+    @JoinColumn(name = "comment_id")
+    private Comment comment;
+
+
 }

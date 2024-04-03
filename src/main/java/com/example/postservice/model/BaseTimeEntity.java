@@ -1,4 +1,4 @@
-package com.example.postservice.entity;
+package com.example.postservice.model;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;

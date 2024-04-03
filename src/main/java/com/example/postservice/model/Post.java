@@ -1,11 +1,14 @@
-package com.example.postservice.entity;
+package com.example.postservice.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@DynamicInsert
 @Getter
 @Entity
 @Table(name = "post")
@@ -26,10 +29,12 @@ public class Post extends BaseTimeEntity {
     private Boolean accessibility;
 
     @Column(nullable = false)
-    private Integer hit = 0;
+    @ColumnDefault("0")
+    private Integer hit;
 
     @Column(nullable = false)
-    private Integer like = 0;
+    @ColumnDefault("0")
+    private Integer like;
 
     @Column(nullable = false)
     private Long userId;
