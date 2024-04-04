@@ -1,6 +1,7 @@
 package com.example.postservice.model;
 
 import com.example.postservice.dto.request.CommentCreateRequestDto;
+import com.example.postservice.dto.request.CommentUpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -37,5 +38,9 @@ public class Comment extends BaseTimeEntity{
                 .userId(dto.userId())
                 .content(dto.content())
                 .build();
+    }
+
+    public void update(CommentUpdateRequestDto dto) {
+        this.content = dto.content();
     }
 }
