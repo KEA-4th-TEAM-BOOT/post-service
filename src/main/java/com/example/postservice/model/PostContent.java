@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Document(collection = "place_info")
+@Document(collection = "post_content")
 public class PostContent {
     @Id
     private String id;
