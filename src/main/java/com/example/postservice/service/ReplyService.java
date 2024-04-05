@@ -4,8 +4,8 @@ import com.example.postservice.dto.request.ReplyCreateRequestDto;
 import com.example.postservice.dto.response.ReplyFindOneResponseDto;
 import com.example.postservice.model.Comment;
 import com.example.postservice.model.Reply;
-import com.example.postservice.repository.CommentJpaRepository;
-import com.example.postservice.repository.ReplyJpaRepository;
+import com.example.postservice.repository.CommentRepository;
+import com.example.postservice.repository.ReplyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
@@ -17,20 +17,20 @@ import java.util.NoSuchElementException;
 @Transactional(readOnly = true)
 @Service
 public class ReplyService {
-    private final ReplyJpaRepository replyJpaRepository;
-    private final CommentJpaRepository commentJpaRepository;
+    private final ReplyRepository replyRepository;
+    private final CommentRepository commentRepository;
 
     @Transactional(rollbackFor = Exception.class)
     public boolean create(ReplyCreateRequestDto dto) {
-        Comment existingComment = commentJpaRepository.findById(dto.commentId())
+        Comment existingComment = commentRepository.findById(dto.commentId())
                 .orElseThrow(IllegalArgumentException::new);
         Reply newReply = Reply.ofReply(dto, existingComment);
-        replyJpaRepository.save(newReply);
+        replyRepository.save(newReply);
         return true;
     }
 
     public ReplyFindOneResponseDto findOne(Long id) {
-        Reply existingReply = replyJpaRepository.findById(id)
+        Reply existingReply = replyRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Reply with id" + id + "not found"));
         return ReplyFindOneResponseDto.from(existingReply);
         // TODO: 응답에 post 넣을건지
@@ -39,7 +39,7 @@ public class ReplyService {
     @Transactional
     public boolean delete(Long id) {
         try {
-            replyJpaRepository.deleteById(id);
+            replyRepository.deleteById(id);
             return true;
         } catch (EmptyResultDataAccessException e) {
             // TODO: 로깅 처리
