@@ -22,6 +22,7 @@ public class PostService {
     public boolean create(PostCreateRequestDto postCreateRequestDto) {
         Post newPost = Post.ofPost(postCreateRequestDto);
         postJpaRepository.save(newPost);
+        // TODO: 태그, 내용 추가
         return true;
     }
 

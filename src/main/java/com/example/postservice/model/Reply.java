@@ -1,5 +1,7 @@
 package com.example.postservice.model;
 
+import com.example.postservice.dto.request.CommentCreateRequestDto;
+import com.example.postservice.dto.request.ReplyCreateRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,5 +26,12 @@ public class Reply extends BaseTimeEntity{
     @JoinColumn(name = "comment_id")
     private Comment comment;
 
+    public static Reply ofReply(ReplyCreateRequestDto dto, Comment existingComment) {
+        return Reply.builder()
+                .comment(existingComment)
+                .userId(dto.userId())
+                .content(dto.content())
+                .build();
+    }
 
 }

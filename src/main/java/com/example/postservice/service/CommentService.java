@@ -35,15 +35,16 @@ public class CommentService {
         Comment existingComment = commentJpaRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Comment with id" + id + "not found"));
         return CommentFindOneResponseDto.from(existingComment);
+        // TODO: 응답에 post 넣을건지
     }
 
-    @Transactional(rollbackFor = Exception.class)
-    public boolean update(CommentUpdateRequestDto dto) {
-        Comment existingComment = commentJpaRepository.findById(dto.id())
-                .orElseThrow(() -> new NoSuchElementException("Comment with id " + dto.id() + " not found"));
-        existingComment.update(dto);
-        return true;
-    }
+//    @Transactional(rollbackFor = Exception.class)
+//    public boolean update(CommentUpdateRequestDto dto) {
+//        Comment existingComment = commentJpaRepository.findById(dto.id())
+//                .orElseThrow(() -> new NoSuchElementException("Comment with id " + dto.id() + " not found"));
+//        existingComment.update(dto);
+//        return true;
+//    }
 
     @Transactional
     public boolean delete(Long id) {
