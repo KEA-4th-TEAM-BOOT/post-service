@@ -8,10 +8,11 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Entity
-@Table(name = "like")
+@Table(name = "likes")
 public class Like extends BaseTimeEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "like_id")
     private Long id;
 
     @Column(nullable = false)
@@ -20,4 +21,11 @@ public class Like extends BaseTimeEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
+
+    public static Like ofLike(Post post, Long userId) {
+        return Like.builder()
+                .post(post)
+                .userId(userId)
+                .build();
+    }
 }

@@ -2,7 +2,7 @@ package com.example.postservice.dto.response;
 
 import com.example.postservice.model.Post;
 
-public record PostFindOneResponseDto(Long id, Long userID, Long categoryId, Long subCategoryId, String subject, String title, String thumbnail, Boolean accessibility, Integer hit, Integer like) {
+public record PostFindOneResponseDto(Long id, Long userID, Long categoryId, Long subCategoryId, String subject, String title, String thumbnail, Boolean accessibility, Integer hitCnt, Integer likeCnt) {
 
     public static PostFindOneResponseDto from(Post post) {
         return new PostFindOneResponseDto(
@@ -14,8 +14,8 @@ public record PostFindOneResponseDto(Long id, Long userID, Long categoryId, Long
                 post.getTitle(),
                 post.getThumbnail(),
                 post.getAccessibility(),
-                post.getHit(),
-                post.getLike()
+                post.getHitCnt(),
+                post.getLikeCnt()
         );
     }
 }

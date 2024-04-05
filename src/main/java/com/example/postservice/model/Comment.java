@@ -13,10 +13,11 @@ import org.hibernate.annotations.DynamicInsert;
 @DynamicInsert
 @Getter
 @Entity
-@Table(name = "comment")
+@Table(name = "comments")
 public class Comment extends BaseTimeEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "comment_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
