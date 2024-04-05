@@ -1,6 +1,6 @@
 package com.example.postservice.service;
 
-import com.example.postservice.dto.response.LikeUserPostResponseDto;
+import com.example.postservice.dto.response.UserLikePostResponseDto;
 import com.example.postservice.model.Like;
 import com.example.postservice.model.Post;
 import com.example.postservice.repository.LikeJpaRepository;
@@ -30,10 +30,11 @@ public class LikeService {
         return true;
     }
 
-    public Page<LikeUserPostResponseDto> callUserLike(Long userId, Pageable pageable) {
+    //유저가 좋아요를 누른 게시물 리스트
+    public Page<UserLikePostResponseDto> callUserLike(Long userId, Pageable pageable) {
         Page<Like> userLikeList = likeJpaRepository.findByUserId(userId, pageable);
 
-        return userLikeList.map(like -> new LikeUserPostResponseDto(
+        return userLikeList.map(like -> new UserLikePostResponseDto(
                 like.getPost().getId(),
                 like.getPost().getSubject(),
                 like.getPost().getTitle(),

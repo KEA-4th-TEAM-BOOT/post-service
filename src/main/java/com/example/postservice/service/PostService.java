@@ -35,6 +35,7 @@ public class PostService {
         return PostFindOneResponseDto.from(existingPost);
     }
 
+    //게시물 제목 검색
     public Page<PostSearchResponseDto> findTitleByKeyword(String keyword, Pageable pageable) {
         Page<Post> postList = postJpaRepository.findByTitleContainingIgnoreCase(keyword, pageable);
 
