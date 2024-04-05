@@ -3,10 +3,13 @@ package com.example.postservice.service;
 import com.example.postservice.dto.request.PostCreateRequestDto;
 import com.example.postservice.dto.request.PostUpdateRequestDto;
 import com.example.postservice.dto.response.PostFindOneResponseDto;
+import com.example.postservice.dto.response.PostSearchResponseDto;
 import com.example.postservice.model.Post;
 import com.example.postservice.repository.PostJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +33,17 @@ public class PostService {
         Post existingPost = postJpaRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Post with id " + id + " not found"));
         return PostFindOneResponseDto.from(existingPost);
+    }
+
+    public Page<PostSearchResponseDto> findTitleByKeyword(String keyword, Pageable pageable) {
+        Page<Post> postList = postJpaRepository.findByTitleContainingIgnoreCase(keyword, pageable);
+
+        return postList.map(post -> new PostSearchResponseDto(
+                post.getId(),
+                post.getSubject(),
+                post.getTitle(),
+                post.getThumbnail()
+        ));
     }
 
     @Transactional(rollbackFor = Exception.class)
