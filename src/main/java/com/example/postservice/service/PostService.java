@@ -37,28 +37,25 @@ public class PostService {
     }
 
     //게시물 제목 검색
-    public Page<PostSearchResponseDto> findTitleByKeyword(String keyword, Pageable pageable) {
+    public Page<PostSearchResponseDto> findPostsByTitle(String keyword, Pageable pageable) {
         Page<Post> postList = postRepository.findByTitleContainingIgnoreCase(keyword, pageable);
         return postList.map(PostSearchResponseDto::from);
     }
 
     //subject로 게시물 리스트
-    public Page<PostSearchResponseDto> findPostsBySubject(String subject, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public Page<PostSearchResponseDto> findPostsBySubject(String subject, Pageable pageable) {
         Page<Post> postList = postRepository.findBySubject(subject, pageable);
         return postList.map(PostSearchResponseDto::from);
     }
 
     //LikeCnt 기준 내림차순으로 게시물 리스트
-    public Page<PostSearchResponseDto> findPostsOrderByLikeCnt(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public Page<PostSearchResponseDto> findPostsOrderByLikeCnt(Pageable pageable) {
         Page<Post> postList = postRepository.findByOrderByLikeCntDesc(pageable);
         return postList.map(PostSearchResponseDto::from);
     }
 
-    //가장 최근 게시물 리스트
-    public Page<PostSearchResponseDto> getRecentPostList(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    //가장 최근 게시물 모두 조회
+    public Page<PostSearchResponseDto> findRecentPosts(Pageable pageable) {
         Page<Post> postList = postRepository.findByOrderByCreatedTimeDesc(pageable);
         return postList.map(PostSearchResponseDto::from);
     }
