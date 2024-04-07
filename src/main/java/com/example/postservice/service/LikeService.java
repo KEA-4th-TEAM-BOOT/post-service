@@ -31,7 +31,7 @@ public class LikeService {
     }
 
     //유저가 좋아요를 누른 게시물 리스트
-    public Page<UserLikePostResponseDto> callUserLike(Long userId, Pageable pageable) {
+    public Page<UserLikePostResponseDto> findUserLike(Long userId, Pageable pageable) {
         Page<Like> userLikeList = likeRepository.findByUserId(userId, pageable);
 
         return userLikeList.map(like -> new UserLikePostResponseDto(

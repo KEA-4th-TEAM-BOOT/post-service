@@ -28,30 +28,30 @@ public class PostController {
 
     @GetMapping("/search/title")
     public ResponseEntity<SuccessResponse> searchPostsByTitle(@RequestParam(value = "keyword") String keyword,
-                                                              @RequestParam(value = "page", defaultValue = "0") Integer page,
-                                                              @RequestParam(value = "size", defaultValue = "12") Integer size) {
+                                                              @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+                                                              @RequestParam(value = "size", required = false, defaultValue = "12") Integer size) {
         Pageable pageable = PageRequest.of(page, size);
         return new ResponseEntity<>(SuccessResponse.of(postService.findPostsByTitle(keyword, pageable)), HttpStatus.OK);
     }
 
     @GetMapping("/search/subject")
     public ResponseEntity<SuccessResponse> searchPostsBySubject(@RequestParam(value = "keyword") String keyword,
-                                                                @RequestParam(value = "page", defaultValue = "0") Integer page,
-                                                                @RequestParam(value = "size", defaultValue = "12") Integer size) {
+                                                                @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+                                                                @RequestParam(value = "size", required = false, defaultValue = "12") Integer size) {
         Pageable pageable = PageRequest.of(page, size);
         return new ResponseEntity<>(SuccessResponse.of(postService.findPostsBySubject(keyword, pageable)), HttpStatus.OK);
     }
 
     @GetMapping("/inquiry/like")
-    public ResponseEntity<SuccessResponse> inquiryPostsOrderByLikeCnt(@RequestParam(value = "page", defaultValue = "0") Integer page,
-                                                                      @RequestParam(value = "size", defaultValue = "12") Integer size) {
+    public ResponseEntity<SuccessResponse> inquiryPostsOrderByLikeCnt(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+                                                                      @RequestParam(value = "size", required = false, defaultValue = "12") Integer size) {
         Pageable pageable = PageRequest.of(page, size);
         return new ResponseEntity<>(SuccessResponse.of(postService.findPostsOrderByLikeCnt(pageable)), HttpStatus.OK);
     }
 
     @GetMapping("/inquriy/recent")
-    public ResponseEntity<SuccessResponse> inquiryRecentPosts(@RequestParam(value = "page", defaultValue = "0") Integer page,
-                                                              @RequestParam(value = "size", defaultValue = "12") Integer size) {
+    public ResponseEntity<SuccessResponse> inquiryRecentPosts(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+                                                              @RequestParam(value = "size", required = false, defaultValue = "12") Integer size) {
         Pageable pageable = PageRequest.of(page, size);
         return new ResponseEntity<>(SuccessResponse.of(postService.findRecentPosts(pageable)), HttpStatus.OK);
     }
