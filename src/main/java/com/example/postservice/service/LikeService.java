@@ -25,7 +25,7 @@ public class LikeService {
     public boolean addLike(Long postId, Long userId) {
         Post existingPost = postRepository.findById(postId)
                 .orElseThrow(() -> new NoSuchElementException("Post with id " + postId + " not found"));
-        Like newLike = Like.ofLike(existingPost, userId);
+        Like newLike = Like.of(existingPost, userId);
         likeRepository.save(newLike);
         return true;
     }

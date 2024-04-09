@@ -24,7 +24,7 @@ public class CommentService {
     public boolean create(CommentCreateRequestDto dto) {
         Post existingPost = postRepository.findById(dto.postId())
                 .orElseThrow(IllegalArgumentException::new);
-        Comment newComment = Comment.ofComment(dto, existingPost);
+        Comment newComment = Comment.of(dto, existingPost);
         commentRepository.save(newComment);
         return true;
     }

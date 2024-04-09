@@ -24,7 +24,7 @@ public class ReplyService {
     public boolean create(ReplyCreateRequestDto dto) {
         Comment existingComment = commentRepository.findById(dto.commentId())
                 .orElseThrow(IllegalArgumentException::new);
-        Reply newReply = Reply.ofReply(dto, existingComment);
+        Reply newReply = Reply.of(dto, existingComment);
         replyRepository.save(newReply);
         return true;
     }

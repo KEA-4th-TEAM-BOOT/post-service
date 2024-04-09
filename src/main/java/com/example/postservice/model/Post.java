@@ -22,11 +22,14 @@ public class Post extends BaseTimeEntity {
     @Column(name = "post_id")
     private Long id;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "post")
     private List<Comment> commentList;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "post")
     private List<Like> likeList;
+
+    @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "post")
+    private List<PostTag> postTagList;
 
     @Column(nullable = false)
     private Long userId;
@@ -54,24 +57,28 @@ public class Post extends BaseTimeEntity {
     @ColumnDefault("0")
     private Integer likeCnt;
 
-    public static Post ofPost(PostCreateRequestDto dto) {
+    public static Post of(PostCreateRequestDto dto) {
         return Post.builder()
+                .userId(dto.userId())
+                .categoryId(dto.categoryId())
+                .subCategoryId(dto.subCategoryId())
                 .subject(dto.subject())
                 .title(dto.title())
                 .thumbnail(dto.thumbnail())
                 .accessibility(dto.accessibility())
-                .userId(dto.userId())
-                .categoryId(dto.categoryId())
-                .subCategoryId(dto.subCategoryId())
                 .build();
     }
 
     public void updatePost(PostUpdateRequestDto postUpdateRequestDto) {
+        this.categoryId = postUpdateRequestDto.categoryId();
+        this.subCategoryId = postUpdateRequestDto.subCategoryId();
         this.subject = postUpdateRequestDto.subject();
         this.title = postUpdateRequestDto.title();
         this.thumbnail = postUpdateRequestDto.thumbnail();
         this.accessibility = postUpdateRequestDto.accessibility();
-        this.categoryId = postUpdateRequestDto.categoryId();
-        this.subCategoryId = postUpdateRequestDto.subCategoryId();
+    }
+
+    public void addPostTag(PostTag postTag) {
+        this.postTagList.add(postTag);
     }
 }

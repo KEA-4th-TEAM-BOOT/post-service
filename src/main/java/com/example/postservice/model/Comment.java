@@ -33,15 +33,11 @@ public class Comment extends BaseTimeEntity{
     @ColumnDefault("false")
     private Boolean replyInclude;
 
-    public static Comment ofComment(CommentCreateRequestDto dto, Post existingPost) {
+    public static Comment of(CommentCreateRequestDto dto, Post existingPost) {
         return Comment.builder()
                 .post(existingPost)
                 .userId(dto.userId())
                 .content(dto.content())
                 .build();
-    }
-
-    public void update(CommentUpdateRequestDto dto) {
-        this.content = dto.content();
     }
 }

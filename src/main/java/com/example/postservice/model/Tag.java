@@ -17,4 +17,10 @@ public class Tag extends BaseTimeEntity{
 
     @Column(nullable = false)
     private String name;
+
+    public static Tag from(String name) {
+        return Tag.builder()
+                .name(name)
+                .build();
+    }
 }

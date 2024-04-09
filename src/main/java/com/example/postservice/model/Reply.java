@@ -27,7 +27,7 @@ public class Reply extends BaseTimeEntity{
     @JoinColumn(name = "comment_id")
     private Comment comment;
 
-    public static Reply ofReply(ReplyCreateRequestDto dto, Comment existingComment) {
+    public static Reply of(ReplyCreateRequestDto dto, Comment existingComment) {
         return Reply.builder()
                 .comment(existingComment)
                 .userId(dto.userId())

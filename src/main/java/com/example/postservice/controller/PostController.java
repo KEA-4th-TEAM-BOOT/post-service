@@ -26,12 +26,21 @@ public class PostController {
         return new ResponseEntity<>(SuccessResponse.of(postService.findOne(postId)), HttpStatus.OK);
     }
 
+    // TODO: 응답에 userId도 포함
     @GetMapping("/search/title")
     public ResponseEntity<SuccessResponse> searchPostsByTitle(@RequestParam(value = "keyword") String keyword,
                                                               @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
                                                               @RequestParam(value = "size", required = false, defaultValue = "12") Integer size) {
         Pageable pageable = PageRequest.of(page, size);
         return new ResponseEntity<>(SuccessResponse.of(postService.findPostsByTitle(keyword, pageable)), HttpStatus.OK);
+    }
+
+    @GetMapping("/search/tag")
+    public ResponseEntity<SuccessResponse> searchPostsByTag(@RequestParam(value = "keyword") String keyword,
+                                                              @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+                                                              @RequestParam(value = "size", required = false, defaultValue = "12") Integer size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return new ResponseEntity<>(SuccessResponse.of(postService.findPostsByTag(keyword, pageable)), HttpStatus.OK);
     }
 
     @GetMapping("/search/subject")

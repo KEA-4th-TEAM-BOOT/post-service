@@ -22,7 +22,7 @@ public class Like extends BaseTimeEntity{
     @JoinColumn(name = "post_id")
     private Post post;
 
-    public static Like ofLike(Post post, Long userId) {
+    public static Like of(Post post, Long userId) {
         return Like.builder()
                 .post(post)
                 .userId(userId)
