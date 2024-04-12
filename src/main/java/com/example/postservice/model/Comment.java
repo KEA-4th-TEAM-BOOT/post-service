@@ -1,11 +1,13 @@
 package com.example.postservice.model;
 
 import com.example.postservice.dto.request.CommentCreateRequestDto;
-import com.example.postservice.dto.request.CommentUpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -23,6 +25,9 @@ public class Comment extends BaseTimeEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
+
+    @OneToMany(mappedBy = "comment", cascade = CascadeType.REMOVE)
+    private List<Reply> replyList = new ArrayList<>();
 
     @Column(nullable = false)
     private Long userId;

@@ -4,15 +4,18 @@ import com.example.postservice.dto.request.PostCreateRequestDto;
 import com.example.postservice.dto.request.PostUpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @DynamicInsert
+@Slf4j
 @Getter
 @Entity
 @Table(name = "posts")
@@ -23,13 +26,13 @@ public class Post extends BaseTimeEntity {
     private Long id;
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "post")
-    private List<Comment> commentList;
+    private List<Comment> commentList = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "post")
-    private List<Like> likeList;
+    private List<Like> likeList = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "post")
-    private List<PostTag> postTagList;
+    private List<PostTag> postTagList = new ArrayList<>();
 
     @Column(nullable = false)
     private Long userId;
@@ -49,11 +52,9 @@ public class Post extends BaseTimeEntity {
     @Column(nullable = false)
     private Boolean accessibility;
 
-    @Column(nullable = false)
     @ColumnDefault("0")
     private Integer hitCnt;
 
-    @Column(nullable = false)
     @ColumnDefault("0")
     private Integer likeCnt;
 
@@ -79,6 +80,11 @@ public class Post extends BaseTimeEntity {
     }
 
     public void addPostTag(PostTag postTag) {
+        if (this.postTagList == null) {
+            log.error("postTagList is null. Initializing...");
+            this.postTagList = new ArrayList<>();
+        }
         this.postTagList.add(postTag);
+        log.debug("Added postTag, list size now: " + this.postTagList.size());
     }
 }

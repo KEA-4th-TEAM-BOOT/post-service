@@ -20,6 +20,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
 
+    // TODO: replyInclude 설정 추가
     @Transactional(rollbackFor = Exception.class)
     public boolean create(CommentCreateRequestDto dto) {
         Post existingPost = postRepository.findById(dto.postId())

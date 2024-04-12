@@ -34,7 +34,6 @@ public class PostService {
     @Transactional
     public boolean create(PostCreateRequestDto postCreateRequestDto) {
         Post newPost = Post.of(postCreateRequestDto);
-        postRepository.save(newPost);
         // TODO: content, url 추가
         // tag 설정
         if (postCreateRequestDto.tags() != null && !postCreateRequestDto.tags().isEmpty()) {
@@ -46,6 +45,7 @@ public class PostService {
                 newPost.addPostTag(postTag);
             }
         }
+        postRepository.save(newPost);
         return true;
     }
 
@@ -68,6 +68,7 @@ public class PostService {
     }
 
     //subject로 게시물 리스트
+    // TODO: subject enum으로 변경
     public Page<PostSearchResponseDto> findPostsBySubject(String subject, Pageable pageable) {
         Page<Post> postList = postRepository.findBySubject(subject, pageable);
         return postList.map(PostSearchResponseDto::from);

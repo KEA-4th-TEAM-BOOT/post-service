@@ -21,6 +21,7 @@ public class LikeService {
     private final LikeRepository likeRepository;
     private final PostRepository postRepository;
 
+    // TODO: 중복 생성 문제 해결
     @Transactional(rollbackFor = Exception.class)
     public boolean addLike(Long postId, Long userId) {
         Post existingPost = postRepository.findById(postId)
@@ -33,7 +34,7 @@ public class LikeService {
     //유저가 좋아요를 누른 게시물 리스트
     public Page<UserLikePostResponseDto> findUserLike(Long userId, Pageable pageable) {
         Page<Like> userLikeList = likeRepository.findByUserId(userId, pageable);
-
+        // TODO: 반환값에 유저id or 유저 정보 추가
         return userLikeList.map(like -> new UserLikePostResponseDto(
                 like.getPost().getId(),
                 like.getPost().getSubject(),
