@@ -48,3 +48,5 @@ management:
     enable:
       jvm: true
       tomcat: true
+
+
