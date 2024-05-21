@@ -1,6 +1,6 @@
 package com.example.postservice;
 
-import com.example.postservice.config.DatasourceProperties;
+//import com.example.postservice.config.DatasourceProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
