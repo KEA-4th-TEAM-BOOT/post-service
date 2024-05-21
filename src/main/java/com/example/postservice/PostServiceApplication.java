@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 
 @EnableJpaAuditing
 @SpringBootApplication
-@EnableConfigurationProperties(DatasourceProperties.class)
+//@EnableConfigurationProperties(DatasourceProperties.class)
 public class PostServiceApplication {
 
     public static void main(String[] args) {

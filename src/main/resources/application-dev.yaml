@@ -3,29 +3,28 @@ server:
   servlet:
     contextPath: /api/v1/post
 
-# Database 접속 정보 위치 (Secret으로 주입)
-mysql:
-  filepath: "/usr/src/myapp/datasource/postgresql-info.yaml"
-
-# Database 접속 정보
-datasource:
-  driver-class-name:
-  url:
-  username:
-  password:
+## Database 접속 정보 위치 (Secret으로 주입)
+#mysql:
+#  filepath: "/usr/src/myapp/datasource/postgresql-info.yaml"
+#
+## Database 접속 정보
+#datasource:
+#  driver-class-name:
+#  url:
+#  username:
+#  password:
 
 spring:
-#  datasource:
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}
-#    username: ${DB_USERNAME}
-#    password: ${DB_PASSWORD}
-#    hikari:
-#      auto-commit: false
-#      connection-test-query: SELECT 1
-#      minimum-idle: 10
-#      maximum-pool-size: 20
-
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}?createDatabaseIfNotExist=true
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      auto-commit: false
+      connection-test-query: SELECT 1
+      minimum-idle: 10
+      maximum-pool-size: 20
 
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
