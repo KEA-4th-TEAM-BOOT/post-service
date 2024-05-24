@@ -47,6 +47,9 @@ public class Post extends BaseTimeEntity {
     @Column(nullable = false)
     private String title;
 
+    @Column(nullable = false)
+    private String content;
+
     private String thumbnail;
 
     @Column(nullable = false)
