@@ -68,6 +68,7 @@ public class Post extends BaseTimeEntity {
                 .subCategoryId(dto.subCategoryId())
                 .subject(dto.subject())
                 .title(dto.title())
+                .content(dto.content())
                 .thumbnail(dto.thumbnail())
                 .accessibility(dto.accessibility())
                 .build();
@@ -78,6 +79,7 @@ public class Post extends BaseTimeEntity {
         this.subCategoryId = postUpdateRequestDto.subCategoryId();
         this.subject = postUpdateRequestDto.subject();
         this.title = postUpdateRequestDto.title();
+        this.content = postUpdateRequestDto.content();
         this.thumbnail = postUpdateRequestDto.thumbnail();
         this.accessibility = postUpdateRequestDto.accessibility();
     }
