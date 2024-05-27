@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface LikeRepository extends JpaRepository<Like, Long> {
 
-    Page<Like> findByuserLink(Long userLink, Pageable pageable);
-    Optional<Like> findByPostIdAnduserLink(Long postId, Long userLink);
-    Optional<Like> deleteByPostIdAnduserLink(Long postId, Long userLink);
+    Page<Like> findByUserId(Long userId, Pageable pageable);
+    Optional<Like> findByPostIdAndUserId(Long postId, Long userId);
+    Optional<Like> deleteByPostIdAndUserId(Long postId, Long userId);
 }

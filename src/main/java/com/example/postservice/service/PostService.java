@@ -32,9 +32,8 @@ public class PostService {
     private final CustomPostRepository customPostRepository;
 
     @Transactional
-    public boolean create(PostCreateRequestDto postCreateRequestDto) {
-        Post newPost = Post.of(postCreateRequestDto);
-        // TODO: content, url 추가
+    public boolean create(PostCreateRequestDto postCreateRequestDto, Long userId) {
+        Post newPost = Post.of(postCreateRequestDto,userId);
         // tag 설정
         if (postCreateRequestDto.tags() != null && !postCreateRequestDto.tags().isEmpty()) {
             for (String tagName : postCreateRequestDto.tags()) {
@@ -50,7 +49,7 @@ public class PostService {
     }
 
     public PostFindOneResponseDto findOne(Long id) {
-        Post existingPost = postRepository.findById(id)
+        Post existingPost = postRepository.findDetailedById(id)
                 .orElseThrow(() -> new NoSuchElementException("Post with id " + id + " not found"));
         return PostFindOneResponseDto.from(existingPost);
     }

@@ -31,7 +31,7 @@ volume-path:
 logging:
   level:
     org.hibernate.SQL: debug
-    org.springframework.data.mongodb: DEBUG
+#    org.springframework.data.mongodb: DEBUG
 
 
 #server:

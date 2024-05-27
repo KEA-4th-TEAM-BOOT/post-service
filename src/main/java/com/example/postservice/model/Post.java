@@ -35,7 +35,14 @@ public class Post extends BaseTimeEntity {
     private List<PostTag> postTagList = new ArrayList<>();
 
     @Column(nullable = false)
+    private Long userId;
+
+    @Column(nullable = false)
     private String userLink;
+
+    private String personalPostId;
+
+    private String postVoiceFileUrl;
 
     private Long categoryId;
 
@@ -61,8 +68,9 @@ public class Post extends BaseTimeEntity {
     @ColumnDefault("0")
     private Integer likeCnt;
 
-    public static Post of(PostCreateRequestDto dto) {
+    public static Post of(PostCreateRequestDto dto, Long userId) {
         return Post.builder()
+                .userId(userId)
                 .userLink(dto.userLink())
                 .categoryId(dto.categoryId())
                 .subCategoryId(dto.subCategoryId())

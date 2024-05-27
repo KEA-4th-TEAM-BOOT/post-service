@@ -3,9 +3,16 @@ package com.example.postservice.repository;
 import com.example.postservice.model.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Optional;
+
 public interface PostRepository extends JpaRepository<Post, Long> {
+
+    // Post와 연관된 Comment 및 Reply 엔티티를 함께 로드하는 메서드
+    @EntityGraph(attributePaths = {"commentList.replyList"})
+    Optional<Post> findDetailedById(Long id);
 
     //subject로 게시물 조회
     Page<Post> findBySubject(String subject, Pageable pageable);
