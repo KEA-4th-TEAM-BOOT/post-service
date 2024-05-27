@@ -35,7 +35,7 @@ public class Post extends BaseTimeEntity {
     private List<PostTag> postTagList = new ArrayList<>();
 
     @Column(nullable = false)
-    private Long userId;
+    private String userLink;
 
     private Long categoryId;
 
@@ -63,7 +63,7 @@ public class Post extends BaseTimeEntity {
 
     public static Post of(PostCreateRequestDto dto) {
         return Post.builder()
-                .userId(dto.userId())
+                .userLink(dto.userLink())
                 .categoryId(dto.categoryId())
                 .subCategoryId(dto.subCategoryId())
                 .subject(dto.subject())

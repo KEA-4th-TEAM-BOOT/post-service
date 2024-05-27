@@ -16,16 +16,16 @@ public class Like extends BaseTimeEntity{
     private Long id;
 
     @Column(nullable = false)
-    private Long userId;
+    private Long userLink;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
 
-    public static Like of(Post post, Long userId) {
+    public static Like of(Post post, Long userLink) {
         return Like.builder()
                 .post(post)
-                .userId(userId)
+                .userLink(userLink)
                 .build();
     }
 }

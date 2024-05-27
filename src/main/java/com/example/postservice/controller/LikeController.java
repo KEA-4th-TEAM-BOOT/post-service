@@ -17,22 +17,22 @@ public class LikeController {
 
     @PostMapping("")
     public ResponseEntity<SuccessResponse> addLike(@RequestParam(value = "postId") Long postId,
-                                                   @RequestParam(value = "userId") Long userId) {
-        return new ResponseEntity<>(SuccessResponse.of(likeService.addLike(postId, userId)), HttpStatus.OK);
+                                                   @RequestParam(value = "userLink") Long userLink) {
+        return new ResponseEntity<>(SuccessResponse.of(likeService.addLike(postId, userLink)), HttpStatus.OK);
     }
 
     @GetMapping("/post")
-    public ResponseEntity<SuccessResponse> inquiryPostsByUserLike(@RequestParam(value = "userId") Long userId,
+    public ResponseEntity<SuccessResponse> inquiryPostsByUserLike(@RequestParam(value = "userLink") Long userLink,
                                                                  @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
                                                                  @RequestParam(value = "size", required = false, defaultValue = "12") Integer size) {
         Pageable pageable = PageRequest.of(page, size);
-        return new ResponseEntity<>(SuccessResponse.of(likeService.findUserLike(userId, pageable)), HttpStatus.OK);
+        return new ResponseEntity<>(SuccessResponse.of(likeService.findUserLike(userLink, pageable)), HttpStatus.OK);
     }
 
 
     @DeleteMapping("")
     public ResponseEntity<SuccessResponse> deleteLike(@RequestParam(value = "postId") Long postId,
-                                                   @RequestParam(value = "userId") Long userId) {
-        return new ResponseEntity<>(SuccessResponse.of(likeService.deleteLike(postId, userId)), HttpStatus.OK);
+                                                   @RequestParam(value = "userLink") Long userLink) {
+        return new ResponseEntity<>(SuccessResponse.of(likeService.deleteLike(postId, userLink)), HttpStatus.OK);
     }
 }

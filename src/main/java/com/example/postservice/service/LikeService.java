@@ -23,17 +23,17 @@ public class LikeService {
 
     // TODO: 중복 생성 문제 해결
     @Transactional(rollbackFor = Exception.class)
-    public boolean addLike(Long postId, Long userId) {
+    public boolean addLike(Long postId, Long userLink) {
         Post existingPost = postRepository.findById(postId)
                 .orElseThrow(() -> new NoSuchElementException("Post with id " + postId + " not found"));
-        Like newLike = Like.of(existingPost, userId);
+        Like newLike = Like.of(existingPost, userLink);
         likeRepository.save(newLike);
         return true;
     }
 
     //유저가 좋아요를 누른 게시물 리스트
-    public Page<UserLikePostResponseDto> findUserLike(Long userId, Pageable pageable) {
-        Page<Like> userLikeList = likeRepository.findByUserId(userId, pageable);
+    public Page<UserLikePostResponseDto> findUserLike(Long userLink, Pageable pageable) {
+        Page<Like> userLikeList = likeRepository.findByuserLink(userLink, pageable);
         // TODO: 반환값에 유저id or 유저 정보 추가
         return userLikeList.map(like -> new UserLikePostResponseDto(
                 like.getPost().getId(),
@@ -44,9 +44,9 @@ public class LikeService {
     }
 
     @Transactional
-    public boolean deleteLike(Long postId, Long userId) {
+    public boolean deleteLike(Long postId, Long userLink) {
         try {
-            likeRepository.deleteByPostIdAndUserId(postId, userId);
+            likeRepository.deleteByPostIdAnduserLink(postId, userLink);
             return true;
         } catch (EmptyResultDataAccessException e) {
             // TODO: 로깅 처리
