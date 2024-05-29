@@ -1,5 +1,6 @@
 package com.example.postservice.service;
 
+import com.example.postservice.config.JwtTokenProvider;
 import com.example.postservice.dto.request.PostCreateRequestDto;
 import com.example.postservice.dto.request.PostUpdateRequestDto;
 import com.example.postservice.dto.response.PostFindOneResponseDto;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -30,9 +32,12 @@ public class PostService {
     private final TagRepository tagRepository;
     private final PostTagRepository postTagRepository;
     private final CustomPostRepository customPostRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
-    public boolean create(PostCreateRequestDto postCreateRequestDto, Long userId) {
+    public boolean create(String token, PostCreateRequestDto postCreateRequestDto) {
+        String accessToken = token.substring(7);
+        Long userId = Long.valueOf(jwtTokenProvider.getUserId(accessToken));
         Post newPost = Post.of(postCreateRequestDto,userId);
         // tag 설정
         if (postCreateRequestDto.tags() != null && !postCreateRequestDto.tags().isEmpty()) {
@@ -48,6 +53,7 @@ public class PostService {
         return true;
     }
 
+    //post를 불러올때 comment와 reply는 항상 가져와야 하기에 즉시 로딩으로 구현
     public PostFindOneResponseDto findOne(Long id) {
         Post existingPost = postRepository.findDetailedById(id)
                 .orElseThrow(() -> new NoSuchElementException("Post with id " + id + " not found"));

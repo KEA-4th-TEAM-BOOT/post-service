@@ -4,27 +4,36 @@ import com.example.postservice.model.Comment;
 import com.example.postservice.model.Post;
 import com.example.postservice.model.Reply;
 
+import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public record PostFindOneResponseDto(Long id, String userLink, Long categoryId, Long subCategoryId, String subject, String title, String thumbnail, Boolean accessibility, Integer hitCnt, Integer likeCnt, List<CommentResponseDto> comments) {
+public record PostFindOneResponseDto(Long id, String userLink, Long personalPostId, String postVoiceFileUrl, Long categoryId, Long subCategoryId, String subject, String title, String content, String thumbnail, String thumbnailImageUrl, Boolean accessibility, Integer hitCnt, Integer likeCnt,
+                                     LocalDateTime createdTime, List<CommentResponseDto> comments) {
 
     public static PostFindOneResponseDto from(Post post) {
         List<CommentResponseDto> commentDtos = post.getCommentList().stream()
+                .sorted(Comparator.comparing(Comment::getCreatedTime))
                 .map(CommentResponseDto::from)
                 .collect(Collectors.toList());
 
         return new PostFindOneResponseDto(
                 post.getId(),
                 post.getUserLink(),
+                post.getPersonalPostId(),
+                post.getPostVoiceFileUrl(),
                 post.getCategoryId(),
                 post.getSubCategoryId(),
                 post.getSubject(),
                 post.getTitle(),
+                post.getContent(),
                 post.getThumbnail(),
+                post.getThumbnailImageUrl(),
                 post.getAccessibility(),
                 post.getHitCnt(),
                 post.getLikeCnt(),
+                post.getCreatedTime(),
                 commentDtos
         );
     }
@@ -32,6 +41,7 @@ public record PostFindOneResponseDto(Long id, String userLink, Long categoryId, 
     public record CommentResponseDto(Long id, Long userId, String content, Boolean replyInclude, List<ReplyResponseDto> replies) {
         public static CommentResponseDto from(Comment comment) {
             List<ReplyResponseDto> replyDtos = comment.getReplyList().stream()
+                    .sorted(Comparator.comparing(Reply::getCreatedTime))
                     .map(ReplyResponseDto::from)
                     .collect(Collectors.toList());
 

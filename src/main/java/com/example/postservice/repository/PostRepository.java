@@ -5,14 +5,17 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
 
 import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
     // Post와 연관된 Comment 및 Reply 엔티티를 함께 로드하는 메서드
-    @EntityGraph(attributePaths = {"commentList.replyList"})
-    Optional<Post> findDetailedById(Long id);
+    @Query("SELECT p FROM Post p LEFT JOIN FETCH p.commentList c LEFT JOIN FETCH c.replyList WHERE p.id = :id")
+    Optional<Post> findDetailedById(@Param("id") Long id);
 
     //subject로 게시물 조회
     Page<Post> findBySubject(String subject, Pageable pageable);

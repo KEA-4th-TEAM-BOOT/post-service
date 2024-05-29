@@ -9,7 +9,9 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -26,7 +28,7 @@ public class Post extends BaseTimeEntity {
     private Long id;
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "post")
-    private List<Comment> commentList = new ArrayList<>();
+    private Set<Comment> commentList = new HashSet<>();
 
     @OneToMany(cascade = CascadeType.REMOVE, mappedBy = "post")
     private List<Like> likeList = new ArrayList<>();
@@ -40,7 +42,7 @@ public class Post extends BaseTimeEntity {
     @Column(nullable = false)
     private String userLink;
 
-    private String personalPostId;
+    private Long personalPostId;
 
     private String postVoiceFileUrl;
 
@@ -59,6 +61,8 @@ public class Post extends BaseTimeEntity {
 
     private String thumbnail;
 
+    private String thumbnailImageUrl;
+
     @Column(nullable = false)
     private Boolean accessibility;
 
@@ -72,12 +76,15 @@ public class Post extends BaseTimeEntity {
         return Post.builder()
                 .userId(userId)
                 .userLink(dto.userLink())
+                .personalPostId(dto.personalPostId())
+                .postVoiceFileUrl(dto.postVoiceFileUrl())
                 .categoryId(dto.categoryId())
                 .subCategoryId(dto.subCategoryId())
                 .subject(dto.subject())
                 .title(dto.title())
                 .content(dto.content())
                 .thumbnail(dto.thumbnail())
+                .thumbnailImageUrl(dto.thumbnailImageUrl())
                 .accessibility(dto.accessibility())
                 .build();
     }
