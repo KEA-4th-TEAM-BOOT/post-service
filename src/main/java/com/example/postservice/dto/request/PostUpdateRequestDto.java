@@ -1,4 +1,6 @@
 package com.example.postservice.dto.request;
 
-public record PostUpdateRequestDto(Long id, String subject, String title, String content, String thumbnail, Boolean accessibility, Long categoryId, Long subCategoryId) {
+import com.example.postservice.model.enums.PostAccessibility;
+
+public record PostUpdateRequestDto(Long id, String subject, String title, String content, String thumbnail, PostAccessibility accessibility, Long categoryId, Long subCategoryId) {
 }

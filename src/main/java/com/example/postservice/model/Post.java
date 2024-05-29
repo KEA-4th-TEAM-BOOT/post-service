@@ -2,6 +2,7 @@ package com.example.postservice.model;
 
 import com.example.postservice.dto.request.PostCreateRequestDto;
 import com.example.postservice.dto.request.PostUpdateRequestDto;
+import com.example.postservice.model.enums.PostAccessibility;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -63,8 +64,9 @@ public class Post extends BaseTimeEntity {
 
     private String thumbnailImageUrl;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Boolean accessibility;
+    private PostAccessibility accessibility;
 
     @ColumnDefault("0")
     private Integer hitCnt;
