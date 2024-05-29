@@ -3,13 +3,14 @@ package com.example.postservice.dto.response;
 import com.example.postservice.model.Comment;
 import com.example.postservice.model.Post;
 import com.example.postservice.model.Reply;
+import com.example.postservice.model.enums.PostAccessibility;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public record PostFindOneResponseDto(Long id, String userLink, Long personalPostId, String postVoiceFileUrl, Long categoryId, Long subCategoryId, String subject, String title, String content, String thumbnail, String thumbnailImageUrl, Boolean accessibility, Integer hitCnt, Integer likeCnt,
+public record PostFindOneResponseDto(Long id, String userLink, Long personalPostId, String postVoiceFileUrl, Long categoryId, Long subCategoryId, String subject, String title, String content, String thumbnail, String thumbnailImageUrl, PostAccessibility accessibility, Integer hitCnt, Integer likeCnt,
                                      LocalDateTime createdTime, List<CommentResponseDto> comments) {
 
     public static PostFindOneResponseDto from(Post post) {
