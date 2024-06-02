@@ -21,7 +21,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -67,10 +66,10 @@ public class PostService {
         return PostFindOneResponseDto.from(existingPost);
     }
 
-    public List<PostRecommendResponseDto> findRecommendedPosts() {
+    public List<PostForRecommendResponseDto> findRecommendedPosts() {
         List<Post> posts = postRepository.findAll();
         return posts.stream()
-                .map(PostRecommendResponseDto::from)
+                .map(PostForRecommendResponseDto::from)
                 .collect(Collectors.toList());
     }
 

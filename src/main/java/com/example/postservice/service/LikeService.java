@@ -1,5 +1,6 @@
 package com.example.postservice.service;
 
+import com.example.postservice.dto.response.LikeForRecommendResponseDto;
 import com.example.postservice.dto.response.UserLikePostResponseDto;
 import com.example.postservice.model.Like;
 import com.example.postservice.model.Post;
@@ -12,7 +13,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -41,6 +44,13 @@ public class LikeService {
                 like.getPost().getTitle(),
                 like.getPost().getThumbnail()
         ));
+    }
+
+    public List<LikeForRecommendResponseDto> extractLikeForRecommend() {
+        List<Like> likes = likeRepository.findAll();
+        return likes.stream()
+                .map(LikeForRecommendResponseDto::from)
+                .collect(Collectors.toList());
     }
 
     @Transactional

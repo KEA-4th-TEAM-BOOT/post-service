@@ -29,6 +29,12 @@ public class LikeController {
         return new ResponseEntity<>(SuccessResponse.of(likeService.findUserLike(userLink, pageable)), HttpStatus.OK);
     }
 
+    // recommend service 용 like 추출
+    @GetMapping("/recommend-service")
+    public ResponseEntity<SuccessResponse> extractLikeForRecommend() {
+        return new ResponseEntity<>(SuccessResponse.of(likeService.extractLikeForRecommend()), HttpStatus.OK);
+    }
+
 
     @DeleteMapping("")
     public ResponseEntity<SuccessResponse> deleteLike(@RequestParam(value = "postId") Long postId,
