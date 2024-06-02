@@ -31,6 +31,12 @@ public class PostController {
 //        return new ResponseEntity<>(SuccessResponse.of(postService.findMain()), HttpStatus.OK);
 //    }
 
+    // recommend-service에서 사용되는 post
+    @GetMapping("/recommend-service")
+    public ResponseEntity<SuccessResponse> getRecommendedPosts() {
+        return new ResponseEntity<>(SuccessResponse.of(postService.findRecommendedPosts()), HttpStatus.OK);
+    }
+
     @GetMapping("/mainWithLogin")
     public ResponseEntity<SuccessResponse> getMainPost(@RequestHeader("Authorization") String token) {
         return new ResponseEntity<>(SuccessResponse.of(postService.findMainWithLogin(token)), HttpStatus.OK);
