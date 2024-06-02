@@ -4,10 +4,7 @@ import com.example.postservice.config.JwtTokenProvider;
 import com.example.postservice.config.UserServiceClient;
 import com.example.postservice.dto.request.PostCreateRequestDto;
 import com.example.postservice.dto.request.PostUpdateRequestDto;
-import com.example.postservice.dto.response.PostFindOneResponseDto;
-import com.example.postservice.dto.response.PostMainResponseDto;
-import com.example.postservice.dto.response.PostMainWithLoginResponseDto;
-import com.example.postservice.dto.response.PostSearchResponseDto;
+import com.example.postservice.dto.response.*;
 import com.example.postservice.model.Post;
 import com.example.postservice.model.PostTag;
 import com.example.postservice.model.Tag;
@@ -68,6 +65,13 @@ public class PostService {
         Post existingPost = postRepository.findDetailedById(id)
                 .orElseThrow(() -> new NoSuchElementException("Post with id " + id + " not found"));
         return PostFindOneResponseDto.from(existingPost);
+    }
+
+    public List<PostRecommendResponseDto> findRecommendedPosts() {
+        List<Post> posts = postRepository.findAll();
+        return posts.stream()
+                .map(PostRecommendResponseDto::from)
+                .collect(Collectors.toList());
     }
 
     public PostMainWithLoginResponseDto findMainWithLogin(String token) {
