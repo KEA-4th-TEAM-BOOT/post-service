@@ -16,7 +16,7 @@ pipeline {
         SERVICE_NAME = 'post'
         ECR_REPOSITORY = 'voda-post' // AWS ECR 리포지토리 이름
         AWS_REGION = 'ap-northeast-2' // AWS 리전
-        AWS_ACCOUNT_ID = '981883772993' // 12자리 AWS 계정 ID
+        AWS_ACCOUNT_ID = '981883772993' // 12자리 AWS 계정 ID로 변경
     }
 
     stages {
