@@ -1,9 +1,12 @@
 package com.example.postservice.service;
 
 import com.example.postservice.config.JwtTokenProvider;
+import com.example.postservice.config.UserServiceClient;
 import com.example.postservice.dto.request.PostCreateRequestDto;
 import com.example.postservice.dto.request.PostUpdateRequestDto;
 import com.example.postservice.dto.response.PostFindOneResponseDto;
+import com.example.postservice.dto.response.PostMainResponseDto;
+import com.example.postservice.dto.response.PostMainWithLoginResponseDto;
 import com.example.postservice.dto.response.PostSearchResponseDto;
 import com.example.postservice.model.Post;
 import com.example.postservice.model.PostTag;
@@ -12,14 +15,19 @@ import com.example.postservice.repository.CustomPostRepository;
 import com.example.postservice.repository.PostRepository;
 import com.example.postservice.repository.PostTagRepository;
 import com.example.postservice.repository.TagRepository;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestHeader;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -33,6 +41,8 @@ public class PostService {
     private final PostTagRepository postTagRepository;
     private final CustomPostRepository customPostRepository;
     private final JwtTokenProvider jwtTokenProvider;
+    private final UserServiceClient userServiceClient;
+    private final ObjectMapper objectMapper;
 
     @Transactional
     public boolean create(String token, PostCreateRequestDto postCreateRequestDto) {
@@ -58,6 +68,43 @@ public class PostService {
         Post existingPost = postRepository.findDetailedById(id)
                 .orElseThrow(() -> new NoSuchElementException("Post with id " + id + " not found"));
         return PostFindOneResponseDto.from(existingPost);
+    }
+
+    public PostMainWithLoginResponseDto findMainWithLogin(String token) {
+        // 유저 정보 가져오기
+        String userJson = userServiceClient.getUserJson(token);
+        String nickname = "";
+        String profileUrl = "";
+        List<Long> followingIds = new ArrayList<>();
+
+        try {
+            JsonNode root = objectMapper.readTree(userJson);
+            nickname = root.path("nickname").asText();
+            profileUrl = root.path("profileUrl").asText();
+            JsonNode followingList = root.path("followingList");
+            for (JsonNode node : followingList) {
+                followingIds.add(node.path("userId").asLong());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to parse JSON", e);
+        }
+
+        // 전체 포스트에서 좋아요가 가장 높은 순서대로 포스트 10개 가져오기
+        Pageable topTenPageable = PageRequest.of(0, 10);
+        List<Post> topLikedPosts = postRepository.findByOrderByLikeCntDesc(topTenPageable).getContent();
+        List<PostSearchResponseDto> topLikedPostDtos = topLikedPosts.stream()
+                .map(PostSearchResponseDto::from)
+                .collect(Collectors.toList());
+
+        // 유저가 팔로우한 작성자의 최신 포스트 10개 가져오기
+        List<PostSearchResponseDto> followedAuthorPosts = getFollowedAuthorPosts(followingIds, topTenPageable);
+
+        return PostMainWithLoginResponseDto.of(
+                nickname,
+                profileUrl,
+                topLikedPostDtos,
+                followedAuthorPosts
+        );
     }
 
     //게시물 제목으로 검색
@@ -109,6 +156,13 @@ public class PostService {
             // TODO: 로깅 처리
             return false;
         }
+    }
+
+    private List<PostSearchResponseDto> getFollowedAuthorPosts(List<Long> followingIds, Pageable pageable) {
+        List<Post> followedAuthorPosts = postRepository.findByUserIdInOrderByCreatedTimeDesc(followingIds, pageable).getContent();
+        return followedAuthorPosts.stream()
+                .map(PostSearchResponseDto::from)
+                .collect(Collectors.toList());
     }
 
 }
