@@ -26,6 +26,17 @@ public class PostController {
         return new ResponseEntity<>(SuccessResponse.of(postService.findOne(postId)), HttpStatus.OK);
     }
 
+//    @GetMapping("/main")
+//    public ResponseEntity<SuccessResponse> getMainPost() {
+//        return new ResponseEntity<>(SuccessResponse.of(postService.findMain()), HttpStatus.OK);
+//    }
+
+    @GetMapping("/mainWithLogin")
+    public ResponseEntity<SuccessResponse> getMainPost(@RequestHeader("Authorization") String token) {
+        return new ResponseEntity<>(SuccessResponse.of(postService.findMainWithLogin(token)), HttpStatus.OK);
+    }
+
+
     // TODO: 응답에 userId도 포함
     @GetMapping("/search/title")
     public ResponseEntity<SuccessResponse> searchPostsByTitle(@RequestParam(value = "keyword") String keyword,
@@ -58,7 +69,7 @@ public class PostController {
         return new ResponseEntity<>(SuccessResponse.of(postService.findPostsOrderByLikeCnt(pageable)), HttpStatus.OK);
     }
 
-    @GetMapping("/inquriy/recent")
+    @GetMapping("/inquiry/recent")
     public ResponseEntity<SuccessResponse> inquiryRecentPosts(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
                                                               @RequestParam(value = "size", required = false, defaultValue = "12") Integer size) {
         Pageable pageable = PageRequest.of(page, size);

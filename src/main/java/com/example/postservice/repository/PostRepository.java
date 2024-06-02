@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 
+import java.util.List;
 import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
@@ -25,6 +26,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     // likeCnt가 높은 순서대로 게시물을 조회
     Page<Post> findByOrderByLikeCntDesc(Pageable pageable);
+
+    // 팔로우한 작성자의 최신 포스트 10개를 가져와서 응답
+    Page<Post> findByUserIdInOrderByCreatedTimeDesc(List<Long> userIds, Pageable pageable);
 
     // 가장 최근의 post부터 조회
     Page<Post> findByOrderByCreatedTimeDesc(Pageable pageable);
