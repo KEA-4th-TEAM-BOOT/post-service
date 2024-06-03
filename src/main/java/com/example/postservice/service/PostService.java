@@ -8,10 +8,7 @@ import com.example.postservice.dto.response.*;
 import com.example.postservice.model.Post;
 import com.example.postservice.model.PostTag;
 import com.example.postservice.model.Tag;
-import com.example.postservice.repository.CustomPostRepository;
-import com.example.postservice.repository.PostRepository;
-import com.example.postservice.repository.PostTagRepository;
-import com.example.postservice.repository.TagRepository;
+import com.example.postservice.repository.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +30,7 @@ import java.util.stream.Collectors;
 @Service
 public class PostService {
     private final PostRepository postRepository;
+    private final LikeRepository likeRepository;
     private final TagRepository tagRepository;
     private final PostTagRepository postTagRepository;
     private final CustomPostRepository customPostRepository;
@@ -68,6 +66,17 @@ public class PostService {
 
     public List<PostForRecommendResponseDto> findRecommendedPosts() {
         List<Post> posts = postRepository.findAll();
+        return posts.stream()
+                .map(PostForRecommendResponseDto::from)
+                .collect(Collectors.toList());
+    }
+
+    public List<PostForRecommendResponseDto> findRecommendedWithUserIdPosts(Long userId, Integer page, Integer size) {
+        List<Long> likedPostIds = likeRepository.findByUserId(userId).stream()
+                .map(like -> like.getPost().getId())
+                .collect(Collectors.toList());
+
+        List<Post> posts = postRepository.findByIdInOrderByCreatedTimeDesc(likedPostIds, PageRequest.of(page, size)).getContent();
         return posts.stream()
                 .map(PostForRecommendResponseDto::from)
                 .collect(Collectors.toList());

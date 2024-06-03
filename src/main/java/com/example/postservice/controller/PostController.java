@@ -37,6 +37,14 @@ public class PostController {
         return new ResponseEntity<>(SuccessResponse.of(postService.findRecommendedPosts()), HttpStatus.OK);
     }
 
+    // recommend-service에서 사용되는 특정 유저가 좋아요를 누른 post
+    @GetMapping("/recommend-service-with-userId")
+    public ResponseEntity<SuccessResponse> getRecommendedWithUserIdPosts(@RequestParam("userId") Long userId,
+                                                                         @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
+                                                                         @RequestParam(value = "size", required = false, defaultValue = "5") Integer size) {
+        return new ResponseEntity<>(SuccessResponse.of(postService.findRecommendedWithUserIdPosts(userId, page, size)), HttpStatus.OK);
+    }
+
     @GetMapping("/mainWithLogin")
     public ResponseEntity<SuccessResponse> getMainPost(@RequestHeader("Authorization") String token) {
         return new ResponseEntity<>(SuccessResponse.of(postService.findMainWithLogin(token)), HttpStatus.OK);
@@ -47,7 +55,7 @@ public class PostController {
     @GetMapping("/search/title")
     public ResponseEntity<SuccessResponse> searchPostsByTitle(@RequestParam(value = "keyword") String keyword,
                                                               @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
-                                                              @RequestParam(value = "size", required = false, defaultValue = "12") Integer size) {
+                                                              @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
         Pageable pageable = PageRequest.of(page, size);
         return new ResponseEntity<>(SuccessResponse.of(postService.findPostsByTitle(keyword, pageable)), HttpStatus.OK);
     }
@@ -55,7 +63,7 @@ public class PostController {
     @GetMapping("/search/tag")
     public ResponseEntity<SuccessResponse> searchPostsByTag(@RequestParam(value = "keyword") String keyword,
                                                               @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
-                                                              @RequestParam(value = "size", required = false, defaultValue = "12") Integer size) {
+                                                              @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
         Pageable pageable = PageRequest.of(page, size);
         return new ResponseEntity<>(SuccessResponse.of(postService.findPostsByTag(keyword, pageable)), HttpStatus.OK);
     }
@@ -63,21 +71,21 @@ public class PostController {
     @GetMapping("/search/subject")
     public ResponseEntity<SuccessResponse> searchPostsBySubject(@RequestParam(value = "keyword") String keyword,
                                                                 @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
-                                                                @RequestParam(value = "size", required = false, defaultValue = "12") Integer size) {
+                                                                @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
         Pageable pageable = PageRequest.of(page, size);
         return new ResponseEntity<>(SuccessResponse.of(postService.findPostsBySubject(keyword, pageable)), HttpStatus.OK);
     }
 
     @GetMapping("/inquiry/like")
     public ResponseEntity<SuccessResponse> inquiryPostsOrderByLikeCnt(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
-                                                                      @RequestParam(value = "size", required = false, defaultValue = "12") Integer size) {
+                                                                      @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
         Pageable pageable = PageRequest.of(page, size);
         return new ResponseEntity<>(SuccessResponse.of(postService.findPostsOrderByLikeCnt(pageable)), HttpStatus.OK);
     }
 
     @GetMapping("/inquiry/recent")
     public ResponseEntity<SuccessResponse> inquiryRecentPosts(@RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
-                                                              @RequestParam(value = "size", required = false, defaultValue = "12") Integer size) {
+                                                              @RequestParam(value = "size", required = false, defaultValue = "10") Integer size) {
         Pageable pageable = PageRequest.of(page, size);
         return new ResponseEntity<>(SuccessResponse.of(postService.findRecentPosts(pageable)), HttpStatus.OK);
     }
