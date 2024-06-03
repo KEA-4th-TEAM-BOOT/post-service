@@ -17,16 +17,16 @@ public class LikeController {
 
     @PostMapping("")
     public ResponseEntity<SuccessResponse> addLike(@RequestParam(value = "postId") Long postId,
-                                                   @RequestParam(value = "userLink") Long userLink) {
-        return new ResponseEntity<>(SuccessResponse.of(likeService.addLike(postId, userLink)), HttpStatus.OK);
+                                                   @RequestParam(value = "userId") Long userId) {
+        return new ResponseEntity<>(SuccessResponse.of(likeService.addLike(postId, userId)), HttpStatus.OK);
     }
 
     @GetMapping("/post")
-    public ResponseEntity<SuccessResponse> inquiryPostsByUserLike(@RequestParam(value = "userLink") Long userLink,
+    public ResponseEntity<SuccessResponse> inquiryPostsByUserLike(@RequestParam(value = "userId") Long userId,
                                                                  @RequestParam(value = "page", required = false, defaultValue = "0") Integer page,
                                                                  @RequestParam(value = "size", required = false, defaultValue = "12") Integer size) {
         Pageable pageable = PageRequest.of(page, size);
-        return new ResponseEntity<>(SuccessResponse.of(likeService.findUserLike(userLink, pageable)), HttpStatus.OK);
+        return new ResponseEntity<>(SuccessResponse.of(likeService.findUserLike(userId, pageable)), HttpStatus.OK);
     }
 
     // recommend service 용 like 추출
@@ -38,7 +38,7 @@ public class LikeController {
 
     @DeleteMapping("")
     public ResponseEntity<SuccessResponse> deleteLike(@RequestParam(value = "postId") Long postId,
-                                                   @RequestParam(value = "userLink") Long userLink) {
-        return new ResponseEntity<>(SuccessResponse.of(likeService.deleteLike(postId, userLink)), HttpStatus.OK);
+                                                   @RequestParam(value = "userId") Long userId) {
+        return new ResponseEntity<>(SuccessResponse.of(likeService.deleteLike(postId, userId)), HttpStatus.OK);
     }
 }

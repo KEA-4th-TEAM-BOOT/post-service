@@ -11,12 +11,12 @@ pipeline {
         GITHUB_URL = 'https://github.com/KEA-4th-TEAM-BOOT/post-service.git'
         APP_VERSION = '1.1.1'
         BUILD_DATE = sh(script: "echo `date +%y%m%d.%d%H%M`", returnStdout: true).trim()
-        TAG = "${APP_VERSION}-" + "${BUILD_DATE}"
+        TAG = "${APP_VERSION}-${BUILD_DATE}"
         IMAGE_NAME = 'voda-post'
         SERVICE_NAME = 'post'
         ECR_REPOSITORY = 'voda-post' // AWS ECR 리포지토리 이름
         AWS_REGION = 'ap-northeast-2' // AWS 리전
-        AWS_ACCOUNT_ID = '981883772993' // 12자리 AWS 계정 ID
+        AWS_ACCOUNT_ID = '981883772993' // AWS 계정 ID
     }
 
     stages {
@@ -67,11 +67,14 @@ pipeline {
                         }
 
                         // AWS ECR에 이미지 빌드 및 푸시
-                        sh "docker build -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:${TAG} ."
-                        sh "docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:${TAG}"
+                        sh "docker build -t ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPOSITORY}:${TAG} ."
+                        sh "docker tag ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPOSITORY}:${TAG} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPOSITORY}:latest"
+                        sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPOSITORY}:${TAG}"
+                        sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPOSITORY}:latest"
 
                         // 로컬 Docker 이미지 삭제
-                        sh "docker rmi $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:${TAG}"
+                        sh "docker rmi ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPOSITORY}:${TAG}"
+                        sh "docker rmi ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${ECR_REPOSITORY}:latest"
                     }
                 }
             }
@@ -81,6 +84,9 @@ pipeline {
     post {
         always {
             sh "docker logout"
+            // AWS 자격 증명 환경 변수 지우기
+            sh "unset AWS_ACCESS_KEY_ID"
+            sh "unset AWS_SECRET_ACCESS_KEY"
         }
     }
 }
