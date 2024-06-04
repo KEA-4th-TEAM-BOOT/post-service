@@ -18,7 +18,8 @@ public class PostController {
 
     @PostMapping("")
     public ResponseEntity<SuccessResponse> savePost(@RequestHeader("Authorization") String token, @RequestBody PostCreateRequestDto dto) {
-        return new ResponseEntity<>(SuccessResponse.of(postService.create(token, dto)), HttpStatus.OK);
+        Long postId = postService.create(token, dto);
+        return new ResponseEntity<>(SuccessResponse.of(postId), HttpStatus.OK);
     }
 
     @GetMapping("/{postId}")

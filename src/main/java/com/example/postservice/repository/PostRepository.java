@@ -35,4 +35,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     // postid 리스트로 찾아 최근 생성된 포스트를 반환
     Page<Post> findByIdInOrderByCreatedTimeDesc(List<Long> postIds, Pageable pageable);
+
+    // 여러 postId로 찾아 반환
+    List<Post> findByIdIn(List<Long> postIds);
 }
