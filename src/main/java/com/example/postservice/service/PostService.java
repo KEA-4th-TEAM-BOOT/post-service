@@ -39,10 +39,10 @@ public class PostService {
     private final ObjectMapper objectMapper;
 
     @Transactional
-    public boolean create(String token, PostCreateRequestDto postCreateRequestDto) {
+    public Long create(String token, PostCreateRequestDto postCreateRequestDto) {
         String accessToken = token.substring(7);
         Long userId = Long.valueOf(jwtTokenProvider.getUserId(accessToken));
-        Post newPost = Post.of(postCreateRequestDto,userId);
+        Post newPost = Post.of(postCreateRequestDto, userId);
         // tag 설정
         if (postCreateRequestDto.tags() != null && !postCreateRequestDto.tags().isEmpty()) {
             for (String tagName : postCreateRequestDto.tags()) {
@@ -53,8 +53,8 @@ public class PostService {
                 newPost.addPostTag(postTag);
             }
         }
-        postRepository.save(newPost);
-        return true;
+        Post savedPost = postRepository.save(newPost);
+        return savedPost.getId();
     }
 
     //post를 불러올때 comment와 reply는 항상 가져와야 하기에 즉시 로딩으로 구현
@@ -64,6 +64,7 @@ public class PostService {
         return PostFindOneResponseDto.from(existingPost);
     }
 
+
     public List<PostForRecommendResponseDto> findRecommendedPosts() {
         List<Post> posts = postRepository.findAll();
         return posts.stream()
@@ -72,11 +73,11 @@ public class PostService {
     }
 
     public List<PostForRecommendResponseDto> findRecommendedWithUserIdPosts(Long userId, Integer page, Integer size) {
-        List<Long> likedPostIds = likeRepository.findByUserId(userId).stream()
+        List<Long> likedPostIds = likeRepository.findByUserIdOrderByCreatedTimeDesc(userId, PageRequest.of(page, size)).stream()
                 .map(like -> like.getPost().getId())
                 .collect(Collectors.toList());
 
-        List<Post> posts = postRepository.findByIdInOrderByCreatedTimeDesc(likedPostIds, PageRequest.of(page, size)).getContent();
+        List<Post> posts = postRepository.findByIdIn(likedPostIds);
         return posts.stream()
                 .map(PostForRecommendResponseDto::from)
                 .collect(Collectors.toList());
