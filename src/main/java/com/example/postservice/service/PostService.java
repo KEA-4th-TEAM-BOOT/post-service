@@ -5,6 +5,7 @@ import com.example.postservice.config.UserServiceClient;
 import com.example.postservice.dto.request.PostCreateRequestDto;
 import com.example.postservice.dto.request.PostUpdateRequestDto;
 import com.example.postservice.dto.response.*;
+import com.example.postservice.model.Like;
 import com.example.postservice.model.Post;
 import com.example.postservice.model.PostTag;
 import com.example.postservice.model.Tag;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
@@ -73,15 +75,31 @@ public class PostService {
     }
 
     public List<PostForRecommendResponseDto> findRecommendedWithUserIdPosts(Long userId, Integer page, Integer size) {
-        List<Long> likedPostIds = likeRepository.findByUserIdOrderByCreatedTimeDesc(userId, PageRequest.of(page, size)).stream()
+        // 1단계: userId로 좋아요를 찾고 createdTime 내림차순으로 정렬하여 가져옴
+        List<Like> likes = likeRepository.findByUserIdOrderByCreatedTimeDesc(userId, PageRequest.of(page, size)).getContent();
+
+        // 2단계: 가져온 좋아요의 순서를 유지하여 postIds를 추출
+        List<Long> likedPostIds = likes.stream()
                 .map(like -> like.getPost().getId())
                 .collect(Collectors.toList());
 
+        // 3단계: likedPostIds로 Posts를 찾고 순서를 유지
         List<Post> posts = postRepository.findByIdIn(likedPostIds);
-        return posts.stream()
+
+        // 빠른 조회를 위한 맵 생성
+        Map<Long, Post> postMap = posts.stream().collect(Collectors.toMap(Post::getId, post -> post));
+
+        // likedPostIds의 순서를 유지하며 결과 리스트 생성
+        List<Post> orderedPosts = likedPostIds.stream()
+                .map(postMap::get)
+                .toList();
+
+        // DTO로 변환
+        return orderedPosts.stream()
                 .map(PostForRecommendResponseDto::from)
                 .collect(Collectors.toList());
     }
+
 
     public PostMainWithLoginResponseDto findMainWithLogin(String token) {
         // 유저 정보 가져오기
