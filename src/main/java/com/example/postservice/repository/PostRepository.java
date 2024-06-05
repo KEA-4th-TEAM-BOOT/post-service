@@ -38,4 +38,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     // 여러 postId로 찾아 반환
     List<Post> findByIdIn(List<Long> postIds);
+
+    // 2024-06-05 이승원 작성
+    @Query("SELECT p FROM Post p LEFT JOIN FETCH p.commentList c LEFT JOIN FETCH c.replyList WHERE p.userLink = :userLink and p.personalPostId = :personalPostId")
+    Optional<Post> findDetailedByUserLinkAndPersonalPostId(@Param("userLink")String userLink, @Param("personalPostId")Long personalPostId);
 }
