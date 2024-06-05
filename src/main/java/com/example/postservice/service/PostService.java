@@ -66,6 +66,13 @@ public class PostService {
         return PostFindOneResponseDto.from(existingPost);
     }
 
+    // 2024-06-05 이승원 작성
+    public PostFindOneResponseDto findOneByUserLinkAndPersonalPostId(String userLink, Long personalPostId) {
+        Post existingPost = postRepository.findDetailedByUserLinkAndPersonalPostId(userLink, personalPostId)
+                .orElseThrow(() -> new NoSuchElementException("Post with id " + personalPostId + " not found"));
+        return PostFindOneResponseDto.from(existingPost);
+    }
+
 
     public List<PostForRecommendResponseDto> findRecommendedPosts() {
         List<Post> posts = postRepository.findAll();
@@ -195,5 +202,6 @@ public class PostService {
                 .map(PostSearchResponseDto::from)
                 .collect(Collectors.toList());
     }
+
 
 }

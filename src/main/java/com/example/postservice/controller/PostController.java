@@ -27,6 +27,12 @@ public class PostController {
         return new ResponseEntity<>(SuccessResponse.of(postService.findOne(postId)), HttpStatus.OK);
     }
 
+    // 2024-06-05 이승원 작성
+    @GetMapping("/{userLink}/post/{personalPostId}")
+    public ResponseEntity<SuccessResponse> getPostByUserLinkAndPersonalPostId(@PathVariable String userLink, @PathVariable Long personalPostId){
+        return new ResponseEntity<>(SuccessResponse.of(postService.findOneByUserLinkAndPersonalPostId(userLink, personalPostId)), HttpStatus.OK);
+    }
+
 //    @GetMapping("/main")
 //    public ResponseEntity<SuccessResponse> getMainPost() {
 //        return new ResponseEntity<>(SuccessResponse.of(postService.findMain()), HttpStatus.OK);
