@@ -59,6 +59,7 @@ public class PostService {
         return savedPost.getId();
     }
 
+
     //post를 불러올때 comment와 reply는 항상 가져와야 하기에 즉시 로딩으로 구현
     public PostFindOneResponseDto findOne(Long id) {
         Post existingPost = postRepository.findDetailedById(id)
@@ -71,6 +72,14 @@ public class PostService {
         Post existingPost = postRepository.findDetailedByUserLinkAndPersonalPostId(userLink, personalPostId)
                 .orElseThrow(() -> new NoSuchElementException("Post with id " + personalPostId + " not found"));
         return PostFindOneResponseDto.from(existingPost);
+    }
+
+    public List<PostFindOneResponseDto> findAllPostByUserLink(String userLink) {
+        List<Post> postList = postRepository.findByUserLink(userLink);
+        List<PostFindOneResponseDto> postFindOneResponseDtoList = postList.stream()
+                .map(PostFindOneResponseDto::from)
+                .collect(Collectors.toList());
+        return postFindOneResponseDtoList;
     }
 
 
@@ -176,6 +185,8 @@ public class PostService {
         return postList.map(PostSearchResponseDto::from);
     }
 
+
+
     @Transactional(rollbackFor = Exception.class)
     public boolean update(PostUpdateRequestDto dto) {
         Post existingPost = postRepository.findById(dto.id())
@@ -202,6 +213,5 @@ public class PostService {
                 .map(PostSearchResponseDto::from)
                 .collect(Collectors.toList());
     }
-
 
 }
