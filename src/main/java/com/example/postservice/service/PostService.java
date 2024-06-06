@@ -45,6 +45,8 @@ public class PostService {
         String accessToken = token.substring(7);
         Long userId = Long.valueOf(jwtTokenProvider.getUserId(accessToken));
         Post newPost = Post.of(postCreateRequestDto, userId);
+
+        Post savedPost = postRepository.save(newPost);
         // tag 설정
         if (postCreateRequestDto.tags() != null && !postCreateRequestDto.tags().isEmpty()) {
             for (String tagName : postCreateRequestDto.tags()) {
@@ -55,7 +57,6 @@ public class PostService {
                 newPost.addPostTag(postTag);
             }
         }
-        Post savedPost = postRepository.save(newPost);
         return savedPost.getId();
     }
 
