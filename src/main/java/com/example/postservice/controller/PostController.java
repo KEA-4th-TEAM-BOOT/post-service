@@ -33,6 +33,11 @@ public class PostController {
         return new ResponseEntity<>(SuccessResponse.of(postService.findOneByUserLinkAndPersonalPostId(userLink, personalPostId)), HttpStatus.OK);
     }
 
+    @GetMapping("/findAll/{userLink}")
+    public ResponseEntity<SuccessResponse> getAllPostByUserLink(@PathVariable String userLink){
+        return new ResponseEntity<>(SuccessResponse.of(postService.findAllPostByUserLink(userLink)), HttpStatus.OK);
+    }
+
 //    @GetMapping("/main")
 //    public ResponseEntity<SuccessResponse> getMainPost() {
 //        return new ResponseEntity<>(SuccessResponse.of(postService.findMain()), HttpStatus.OK);
@@ -56,7 +61,6 @@ public class PostController {
     public ResponseEntity<SuccessResponse> getMainPost(@RequestHeader("Authorization") String token) {
         return new ResponseEntity<>(SuccessResponse.of(postService.findMainWithLogin(token)), HttpStatus.OK);
     }
-
 
     // TODO: 응답에 userId도 포함
     @GetMapping("/search/title")
