@@ -11,13 +11,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public record PostFindOneResponseDto(Long id, String userLink, Long personalPostId, String postVoiceFileUrl, Long categoryId, Long subCategoryId, String subject, String title, String content, String thumbnail, String thumbnailImageUrl, PostAccessibility accessibility, Integer hitCnt, Integer likeCnt,
-                                     LocalDateTime createdTime, List<CommentResponseDto> comments) {
+                                     LocalDateTime createdTime, List<CommentResponseDto> comments, List<String> tagList) {
 
     public static PostFindOneResponseDto from(Post post) {
         List<CommentResponseDto> commentDtos = post.getCommentList().stream()
                 .sorted(Comparator.comparing(Comment::getCreatedTime))
                 .map(CommentResponseDto::from)
                 .collect(Collectors.toList());
+
+        List<String> tagList = post.getPostTagList().stream().map(postTag -> postTag.getTag().getName()).toList();
 
         return new PostFindOneResponseDto(
                 post.getId(),
@@ -35,7 +37,8 @@ public record PostFindOneResponseDto(Long id, String userLink, Long personalPost
                 post.getHitCnt(),
                 post.getLikeCnt(),
                 post.getCreatedTime(),
-                commentDtos
+                commentDtos,
+                tagList
         );
     }
 
