@@ -15,15 +15,3 @@ services:
     volumes:
       - ./mysql/init:/docker-entrypoint-initdb.d
 
-  mongodb:
-    container_name: post-mongodb
-    image: mongo:latest
-    command: mongod
-    ports:
-      - 27017:27017
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=admin
-      - MONGO_INITDB_ROOT_PASSWORD=1234
-      - MONGO_INITDB_DATABASE=post
-    volumes:
-      - ./mongodb/init:/docker-entrypoint-initdb.d
