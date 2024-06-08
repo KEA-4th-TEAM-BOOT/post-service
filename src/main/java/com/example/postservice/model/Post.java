@@ -43,6 +43,7 @@ public class Post extends BaseTimeEntity {
     @Column(nullable = false)
     private String userLink;
 
+    @ColumnDefault("0")
     private Long personalPostId;
 
     private String postVoiceFileUrl;
