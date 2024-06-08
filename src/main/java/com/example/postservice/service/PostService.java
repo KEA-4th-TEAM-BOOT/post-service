@@ -119,8 +119,10 @@ public class PostService {
 
 
     public PostMainWithLoginResponseDto findMainWithLogin(String token) {
+        String accessToken = token.substring(7);
+        Long userId = Long.valueOf(jwtTokenProvider.getUserId(accessToken));
         // 유저 정보 가져오기
-        String userJson = userServiceClient.getUserJson(token);
+        String userJson = userServiceClient.getUserJson(userId);
         String nickname = "";
         String profileUrl = "";
         List<Long> followingIds = new ArrayList<>();
