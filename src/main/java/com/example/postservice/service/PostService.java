@@ -117,6 +117,26 @@ public class PostService {
                 .collect(Collectors.toList());
     }
 
+    public PostMainResponseDto findMain() {
+        // 전체 포스트에서 좋아요가 가장 높은 순서대로 포스트 10개 가져오기
+        Pageable topTenPageable = PageRequest.of(0, 10);
+        List<Post> topLikedPosts = postRepository.findByOrderByLikeCntDesc(topTenPageable).getContent();
+        List<PostSearchResponseDto> topLikedPostDtos = topLikedPosts.stream()
+                .map(PostSearchResponseDto::from)
+                .collect(Collectors.toList());
+
+        // 최신 포스트 10개 가져오기
+        List<Post> recentPosts =  postRepository.findByOrderByCreatedTimeDesc(topTenPageable).getContent();
+        List<PostSearchResponseDto> recentPostDtos = recentPosts.stream()
+                .map(PostSearchResponseDto::from)
+                .collect(Collectors.toList());
+
+        return PostMainResponseDto.of(
+                topLikedPostDtos,
+                recentPostDtos
+        );
+    }
+
 
     public PostMainWithLoginResponseDto findMainWithLogin(String token) {
         String accessToken = token.substring(7);
