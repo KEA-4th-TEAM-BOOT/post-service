@@ -43,6 +43,8 @@ public class Post extends BaseTimeEntity {
     @Column(nullable = false)
     private String userLink;
 
+    private String nickName;
+
     @ColumnDefault("0")
     private Long personalPostId;
 
@@ -79,6 +81,7 @@ public class Post extends BaseTimeEntity {
         return Post.builder()
                 .userId(userId)
                 .userLink(dto.userLink())
+                .nickName(dto.nickname())
                 .personalPostId(dto.personalPostId())
                 .postVoiceFileUrl(dto.postVoiceFileUrl())
                 .categoryId(dto.categoryId())

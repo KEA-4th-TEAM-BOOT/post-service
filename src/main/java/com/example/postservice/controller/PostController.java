@@ -57,6 +57,11 @@ public class PostController {
         return new ResponseEntity<>(SuccessResponse.of(postService.findRecommendedWithUserIdPosts(userId, page, size)), HttpStatus.OK);
     }
 
+    @GetMapping("/main")
+    public ResponseEntity<SuccessResponse> getMainPost() {
+        return new ResponseEntity<>(SuccessResponse.of(postService.findMain()), HttpStatus.OK);
+    }
+
     @GetMapping("/mainWithLogin")
     public ResponseEntity<SuccessResponse> getMainPost(@RequestHeader("Authorization") String token) {
         return new ResponseEntity<>(SuccessResponse.of(postService.findMainWithLogin(token)), HttpStatus.OK);
