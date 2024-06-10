@@ -179,7 +179,7 @@ public class PostService {
 
     //게시물 제목으로 검색
     public Page<PostSearchResponseDto> findPostsByTitle(String keyword, Pageable pageable) {
-        Page<Post> postList = postRepository.findByTitleContainingIgnoreCase(keyword, pageable);
+        Page<Post> postList = postRepository.findByTitleContainingIgnoreCaseOrderByCreatedTimeDesc(keyword, pageable);
         return postList.map(PostSearchResponseDto::from);
     }
 
