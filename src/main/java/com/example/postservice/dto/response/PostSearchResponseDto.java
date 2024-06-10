@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public record PostSearchResponseDto(Long postId, String subject, String title, String thumbnail, String thumbnailImageUrl,
-                                    LocalDateTime createdTime, int likeCnt, int size, String userLink, String nickName, String postVoiceFileUrl, long personalPostId, List<String> tagList) {
+                                    LocalDateTime createdTime, int likeCnt, int size, String userLink, String nickname, String postVoiceFileUrl, long personalPostId, List<String> tagList) {
     public static PostSearchResponseDto from(Post post) {
         List<String> tagList = post.getPostTagList().stream().map(postTag -> postTag.getTag().getName()).toList();
 
@@ -23,7 +23,7 @@ public record PostSearchResponseDto(Long postId, String subject, String title, S
                 post.getLikeCnt(),
                 post.getCommentList().size(),
                 post.getUserLink(),
-                post.getNickName(),
+                post.getNickname(),
                 post.getPostVoiceFileUrl(),
                 post.getPersonalPostId(),
                 tagList

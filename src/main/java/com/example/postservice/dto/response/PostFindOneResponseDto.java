@@ -10,7 +10,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public record PostFindOneResponseDto(Long id, String userLink, String nickName, Long personalPostId, String postVoiceFileUrl, Long categoryId, Long subCategoryId, String subject, String title, String content, String thumbnail, String thumbnailImageUrl, PostAccessibility accessibility, Integer hitCnt, Integer likeCnt,
+public record PostFindOneResponseDto(Long id, String userLink, String nickname, Long personalPostId, String postVoiceFileUrl, Long categoryId, Long subCategoryId, String subject, String title, String content, String thumbnail, String thumbnailImageUrl, PostAccessibility accessibility, Integer hitCnt, Integer likeCnt,
                                      LocalDateTime createdTime, List<CommentResponseDto> comments, List<String> tagList) {
 
     public static PostFindOneResponseDto from(Post post) {
@@ -24,7 +24,7 @@ public record PostFindOneResponseDto(Long id, String userLink, String nickName, 
         return new PostFindOneResponseDto(
                 post.getId(),
                 post.getUserLink(),
-                post.getNickName(),
+                post.getNickname(),
                 post.getPersonalPostId(),
                 post.getPostVoiceFileUrl(),
                 post.getCategoryId(),
