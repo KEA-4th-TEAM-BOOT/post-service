@@ -22,7 +22,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findBySubject(String subject, Pageable pageable);
 
     //title로 게시물 검색
-    Page<Post> findByTitleContainingIgnoreCase(String keyword, Pageable pageable);
+    Page<Post> findByTitleContainingIgnoreCaseOrderByCreatedTimeDesc(String keyword, Pageable pageable);
 
     // likeCnt가 높은 순서대로 게시물을 조회
     Page<Post> findByOrderByLikeCntDesc(Pageable pageable);
